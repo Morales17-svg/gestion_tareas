@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Lista de Tareas</h1>
+        <div class="mb-4 text-center">
+            <a href="{% url 'crear_tarea' %}" class="btn btn-primary">Crear Nueva Tarea</a>
+        </div>
+        <ul class="list-group">
+            {% for tarea in tareas %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="tarea{{ tarea.id }}" {% if tarea.completada %}checked{% endif %} onchange="toggleComplete({{ tarea.id }})">
+                        <label class="form-check-label {% if tarea.completada %}completed{% endif %}" for="tarea{{ tarea.id }}">
+                            <strong>{{ tarea.nombre }}</strong> - {{ tarea.descripcion }}
+                        </label>
+                    </div>
+                    <div>
+                        <a href="{% url 'editar_tarea' tarea.id %}" class="btn btn-warning btn-sm me-2">Editar</a>
+                        <a href="{% url 'eliminar_tarea' tarea.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item">No hay tareas disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Enlace a Bootstrap JS y dependencias -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Función para actualizar el estado de la tarea como completada
+        function toggleComplete(tareaId) {
+            // Aquí puedes agregar el código para actualizar el estado de la tarea en tu servidor.
+            // Por ejemplo, hacer una solicitud AJAX para cambiar el estado de completada de la tarea.
+            
+            const checkbox = document.getElementById('tarea' + tareaId);
+            const label = checkbox.nextElementSibling;
+
+            // Cambiar el estilo dependiendo si está marcada o no
+            if (checkbox.checked) {
+                label.classList.add('completed');
+            } else {
+                label.classList.remove('completed');
+            }
+        }
+    </script>
+</body>
+</html>
